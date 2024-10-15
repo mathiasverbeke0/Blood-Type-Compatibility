@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blood Type Compatibility</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: Arial, sans-serif;
+            overflow: hidden;
+        }
+        .background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #ffebee;
+            z-index: -1;
+        }
+        .blood-cell {
+            position: absolute;
+            background-color: rgba(220, 20, 60, 0.6);
+            border-radius: 50%;
+            animation: float 20s infinite;
+        }
+        @keyframes float {
+            0% { transform: translate(0, 0); }
+            50% { transform: translate(100px, 100px); }
+            100% { transform: translate(0, 0); }
+        }
+        .container {
+            position: relative;
+            max-width: 400px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #b71c1c;
+            text-align: center;
+        }
+        .input-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #b71c1c;
+        }
+        select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #b71c1c;
+            border-radius: 4px;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #b71c1c;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #7f0000;
+        }
+        #result {
+            margin-top: 20px;
+            padding: 10px;
+            border-radius: 4px;
+            text-align: center;
+            font-weight: bold;
+        }
+        .compatible {
+            background-color: #c8e6c9;
+            color: #1b5e20;
+        }
+        .not-compatible {
+            background-color: #ffcdd2;
+            color: #b71c1c;
+        }
+    </style>
+</head>
+<body>
+    <div class="background" id="background"></div>
+    <div class="container">
+        <h1>Blood Type <br>Compatibility</h1>
+        <div class="input-group">
+            <label for="recipient">Recipient Blood Type:</label>
+            <select id="recipient">
+                <option value="A+">A+</option>
+                <option value="A-">A-</option>
+                <option value="B+">B+</option>
+                <option value="B-">B-</option>
+                <option value="AB+">AB+</option>
+                <option value="AB-">AB-</option>
+                <option value="O+">O+</option>
+                <option value="O-">O-</option>
+            </select>
+        </div>
+        <div class="input-group">
+            <label for="donor">Donor Blood Type:</label>
+            <select id="donor">
+                <option value="A+">A+</option>
+                <option value="A-">A-</option>
+                <option value="B+">B+</option>
+                <option value="B-">B-</option>
+                <option value="AB+">AB+</option>
+                <option value="AB-">AB-</option>
+                <option value="O+">O+</option>
+                <option value="O-">O-</option>
+            </select>
+        </div>
+        <button onclick="checkCompatibility()">Check Compatibility</button>
+        <div id="result"></div>
+    </div>
+
+    <script>
+        function createBloodCells() {
+            const background = document.getElementById('background');
+            for (let i = 0; i < 50; i++) {
+                const cell = document.createElement('div');
+                cell.className = 'blood-cell';
+                cell.style.left = Math.random() * 100 + 'vw';
+                cell.style.top = Math.random() * 100 + 'vh';
+                cell.style.width = cell.style.height = (Math.random() * 20 + 10) + 'px';
+                cell.style.animationDuration = (Math.random() * 10 + 10) + 's';
+                cell.style.animationDelay = (Math.random() * 10) + 's';
+                background.appendChild(cell);
+            }
+        }
+
+        function checkCompatibility() {
+            const recipient = document.getElementById('recipient').value;
+            const donor = document.getElementById('donor').value;
+            const resultElement = document.getElementById('result');
+
+            const compatibilityChart = {
+                'A+': ['A+', 'A-', 'O+', 'O-'],
+                'A-': ['A-', 'O-'],
+                'B+': ['B+', 'B-', 'O+', 'O-'],
+                'B-': ['B-', 'O-'],
+                'AB+': ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'],
+                'AB-': ['A-', 'B-', 'AB-', 'O-'],
+                'O+': ['O+', 'O-'],
+                'O-': ['O-']
+            };
+
+            if (compatibilityChart[recipient].includes(donor)) {
+                resultElement.innerHTML = "Compatible";
+                resultElement.className = "compatible";
+            } else {
+                resultElement.innerHTML = "Incompatible";
+                resultElement.className = "not-compatible";
+            }
+        }
+
+        createBloodCells();
+    </script>
+</body>
+</html>
